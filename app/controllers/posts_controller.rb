@@ -1,21 +1,24 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, only: [:new, :create]
   
   def new
     @post = Post.new 
   end
 
   def create
-    @post = Post.new(post_params)
+    @post = current_user.posts.build(post_params)
 
     if @post.save
-      redirect_to new_post_path
+      flash[:success] = 'Post successfully created'
+      redirect_to posts_path
     else
+      flash[:error] = 'Something went wrong'
       render :new, status: :unprocessable_entity
     end
   end
 
   def index
+    @posts = Post.all
   end
 
   private
