@@ -11,6 +11,16 @@
   </head>
 
   <body>
-    <%= yield %>
+    <div class="flashes">
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+    </div>
+    <% if user_signed_in? %>
+      <h2><%= current_user.email %></h2>
+      <%= yield %>
+      <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: "delete" } %>
+    <% else %>
+     <%= yield %>
+    <% end %>
   </body>
 </html>
